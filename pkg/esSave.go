@@ -26,7 +26,7 @@ func SaveLogToEs(message, host, timeStamp, level string) {
 	}
 	//创建es客户端
 	client, err := elastic.NewClient(
-		elastic.SetURL("http://localhost:9200"),
+		elastic.SetURL(ESConfig.URL),
 		elastic.SetSniff(false),
 	)
 	if err != nil {
