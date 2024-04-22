@@ -6,11 +6,19 @@ import (
 	"github.com/gin-gonic/gin"
 	"logscan/internal/handler"
 	"logscan/pkg"
+	"logscan/sql"
 )
 
 func main() {
+	sql.InitDB()
+	defer sql.CloseDB()
+	//启动日志接收
 	go func() {
 		pkg.KafkaConsumer()
+	}()
+	//启动报警监控
+	go func() {
+		pkg.StartAlarmMonitor()
 	}()
 	fmt.Println("after consumer")
 	router := gin.Default()
@@ -19,6 +27,12 @@ func main() {
 	router.GET("/searchData", handler.LogMessageInfoHandler)
 	router.GET("/anomalyData", handler.GetNotificationData)
 	router.GET("/monitorData", handler.GetMonitorData)
+	router.GET("/alarmList", handler.HandleGetAlarmList)
+	router.GET("/alarmDashBoard", handler.HandleGetAlarmDashBoard)
+
+	router.POST("/alarmAdd", handler.HandleAddAlarm)
+
+	router.DELETE("/alarmDelete/:id", handler.HandleDeleteAlarm)
 	err := router.Run(":9031")
 	if err != nil {
 		return

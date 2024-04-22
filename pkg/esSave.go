@@ -31,6 +31,7 @@ func SaveLogToEs(message, host, timeStamp, level string) {
 	)
 	if err != nil {
 		log.Println("Failed to create es client:", err)
+		return
 	}
 
 	//创建一个上下文对象，上下文对象用于在程序的各个部分之间传递截止日期、取消信号以及其他请求范围的值
@@ -46,6 +47,7 @@ func SaveLogToEs(message, host, timeStamp, level string) {
 		Do(ctx)
 	if err != nil {
 		log.Println("Failed to save log to es:", err)
+		return
 	}
 	fmt.Println("log saved to es:", response)
 }
