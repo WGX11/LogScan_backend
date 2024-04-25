@@ -10,6 +10,7 @@ import (
 )
 
 func main() {
+	//初始化数据库
 	sql.InitDB()
 	defer sql.CloseDB()
 	//启动日志接收
@@ -20,6 +21,7 @@ func main() {
 	go func() {
 		pkg.StartAlarmMonitor()
 	}()
+	pkg.TestMonitor()
 	fmt.Println("after consumer")
 	router := gin.Default()
 	router.Use(cors.Default())

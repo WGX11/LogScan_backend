@@ -54,6 +54,8 @@ func KafkaConsumer() {
 		return
 	}
 	for msg := range partitionConsumer.Messages() {
+		//向消费者发送消息
+		SendLogMessage(string(msg.Key))
 		currentTime := time.Now().In(location).Format(time.RFC3339)
 		randomNumber := rand.Intn(50)
 		randomNumberString := strconv.Itoa(randomNumber)

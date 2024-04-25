@@ -2,6 +2,7 @@ package sql
 
 import (
 	"fmt"
+	"log"
 	"strings"
 )
 
@@ -113,4 +114,15 @@ func GetAlarmData15Days(userId int) []DashBoard {
 		dashBoards = append(dashBoards, dashBoard)
 	}
 	return dashBoards
+}
+
+func AddAlarmItem(alarmId int) error {
+	db := Db
+	query := `INSERT INTO alarm_item (alarm_id, alarm_time) VALUES (?, NOW());`
+	_, err := db.Exec(query, alarmId)
+	if err != nil {
+		log.Println("Failed to insert alarm item:", err)
+		return err
+	}
+	return nil
 }
